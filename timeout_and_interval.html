@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        window.onload = function () {
+
+            // questa funzione verrà eseguita dopo _almeno_ 2 secondi
+            setTimeout(function () {
+                alert("sono passiti 2s")
+            }, 2000)
+
+
+
+            // questo counter viene incrementato ogni secondo
+            let counter = 0
+
+            const clock = setInterval(function () {
+                counter++
+                console.log("sono passati " + counter + "s")
+                // se il counter raggiunge 10 viene cancellato il setInterval con clearInterval()
+                if (counter === 3) {
+                    clearInterval(clock)
+                }
+            }, 1000)
+        }
+    </script>
+</body>
+
+</html>
