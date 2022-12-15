@@ -16,6 +16,7 @@
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
         }
 
         .card {
@@ -27,6 +28,13 @@
             max-width: 250px;
             margin-right: 20px;
             margin-bottom: 10px;
+            cursor: pointer;
+            background-color: white;
+            transition: scale 0.3s;
+        }
+
+        .card:hover {
+            scale: 1.2;
         }
 
         .card-body {
@@ -46,9 +54,17 @@
         }
 
         input {
+            font-size: 1.6rem;
+            color: #605c9f;
+            margin-top: 2rem;
             margin-bottom: 2rem;
             min-width: 600px;
             min-height: 40px;
+        }
+
+        input::placeholder {
+            color: #b8b8c4;
+
         }
     </style>
 
@@ -56,7 +72,7 @@
 
 <body>
 
-    <input type="text" onchange="handleSearch(event)">
+    <input type="text" onchange="handleSearch(event)" placeholder="Filtra i contenuti per nome">
     <div class="container">
         <!-- <div class="card">
             <img src="https://e-cdns-images.dzcdn.net/images/cover/23bdeda0503dec55e7ba6a9f56d0c3c2/250x250-000000-80-0-0.jpg"
@@ -115,7 +131,7 @@
             const searchQuery = event.target.value.toLowerCase()
             console.log(searchQuery)
 
-            const filteredSongs = songs.filter(song => song.title_short.toLowerCase().includes(searchQuery))
+            const filteredSongs = songs.filter(song => song.title_short.toLowerCase().includes(searchQuery) || song.album.title.toLowerCase().includes(searchQuery))
 
             container.innerHTML = ""
             filteredSongs.forEach(song => {
@@ -133,7 +149,7 @@
 
 
             // // questo metodo filtra, mappa e joina in un'unica riga per assegnare la risultante stringa come innerHTML di container
-            // container.innerHTML = songs.filter(song => song.title_short.toLowerCase().includes(searchQuery)).map(song =>
+            // container.innerHTML = songs.filter(song => song.title_short.toLowerCase().includes(searchQuery) || song.album.title.toLowerCase().includes(searchQuery)).map(song =>
             //     `<div class="card" onclick='window.location.assign("${song.artist.link}")'>
             //                                  <img src=${song.album.cover_medium}
             //                                      alt="">
