@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .container {
+            max-width: 960px;
+            background-color: black;
+            color: white;
+            border-radius: 6px;
+            padding: 0.5rem;
+        }
+
+        .day {
+            display: inline-block;
+            border: 1px solid white;
+            border-radius: 3px;
+            width: 13.7%;
+            aspect-ratio: 1/1;
+            text-align: center;
+        }
+
+        .day span {
+            position: relative;
+            display: block;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .selectDay {
+            background-color: palegreen;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <h1>Loading...</h1>
+    <form onsubmit="handleSubmit(event)">
+        <input type="text" id="myInput" required />
+        <button type="button" onclick="handleInput()">Leggi Valore Input</button>
+        <button type="button" onclick="alert('cancella operazione')">Annulla</button>
+        <button type="submit">Submit</button>
+    </form>
+    <div class="container">
+        <!-- giorni di questo mese verranno generati qui -->
+        <!-- <div class="day">
+            <span>1</span>
+        </div> -->
+
+    </div>
+
+    <script>
+
+
+
+
+        window.addEventListener("DOMContentLoaded", function () {
+
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+            // Lavorare con l'oggetto Date dinamico 
+            const now = new Date() // salvare la data attuale
+            const thisMonth = now.getMonth() // estrarre l'indice del mese
+            const thisYear = now.getFullYear() // estrarre l'anno
+            const lastDayObj = new Date(thisYear, thisMonth + 1, 0) // usare i dati ottenuti prima per creare una nuova data con l'ultimo giorno del mese corrente
+            const lastDay = lastDayObj.getDate() // estrarre solo il giorno del mese
+            console.log(lastDay)
+
+            const title = document.querySelector("h1")
+            title.innerText = months[thisMonth] + " " + thisYear // il titolo della pagina riceverà il mese e l'anno come contenuto
+
+            // referenza al contenitore
+            const container = document.querySelector(".container")
+            // container.onmousemove = function (event) {
+            //     console.log(event)
+            //     // questa funzione verrà eseguita ad ogni movimento del mouse nell'area del container
+            // }
+
+            // title.onmouseleave = function (event) {
+            //     console.log(event)
+            //     alert("sei andato via dal titolo")
+            // }
+
+            const input = document.getElementById("myInput")
+            input.onchange = function (event) {
+                console.log(event)
+                // onchange esegue la funzione di callback quando si clicca fuori dall'input o quando si preme enter
+                // oninput esegue la funzione di callback ad ogni carattere premuto
+
+                const inputValue = event.target.value // salvare il testo dell'input (event.target è l'input, value è il suo contenuto)
+
+
+                // andremo ad eliminare il giorno corrispondente al valore dell'input se compreso nell'intervallo di giorni disponibili
+                if (inputValue > 0 && inputValue <= lastDay) {
+                    const selectedNode = container.children[inputValue - 1] // seleziona tra i nodi figli di container l'indice inputValue - 1
+                    selectedNode.remove() // rimuove dal DOM l'elemento selezionato
+
+                    alert("hai rimosso il giorno numero: " + inputValue)
+                }
+
+
+                // se cambi l'evento con onkeyup puoi commentare il codice precedente e de-commentare questo
+                // title.innerText += inputValue
+
+                // const inputValue = event.code // ad ogni pressione di un tasto avremo il codice corrispondente alla lettera premuta
+                // console.log(inputValue)
+
+                // // se si è premuto un tasto speciale vedremo un effetto sul background del calendario
+                // switch (inputValue) {
+                //     case "Enter":
+                //         container.style.backgroundColor = "purple"
+                //         break;
+                //     case "Shift":
+                //         container.style.backgroundColor = "red"
+                //         break;
+                //     case "Backspace":
+                //         container.style.backgroundColor = "green"
+                //         break;
+                //     case "Space":
+                //         container.style.backgroundColor = "white"
+                //         container.style.color = "black"
+                //         break;
+                // }
+            }
+
+            // generiamo tante celle quanti sono i giorni di questo mese (lastDay)
+            for (let i = 0; i < lastDay; i++) {
+                const day = document.createElement("div")
+                day.className = "day"
+
+                // qui stiamo assegnando un evento di click ad ogni cella del calendario
+                day.onclick = function (event) {
+
+                    //  il prossimo blocco if permetteva di sostituire il valore di default con il numero della cella cliccata
+                    // const input = document.getElementById("myInput")
+                    // if (input.value === "default") {
+                    //     input.value = i + 1
+                    // } else {
+                    //     input.value += i + 1
+                    // }
+
+                    // event.currentTarget.remove() // questo rimuoveva direttamente il giorno cliccato
+
+
+                    // questo blocco controlla se esiste già un elemento selezionato prima di selezionare il prossimo, così da avere solo un giorno colorato alla volta
+
+                    const previouslySelected = document.querySelector(".selectDay")
+                    // console.log(previouslySelected)
+                    if (previouslySelected) {
+                        previouslySelected.classList.remove("selectDay")
+                    }
+
+                    // console.log(event)
+                    event.currentTarget.classList.add("selectDay")
+
+
+
+                    // console.log(event.currentTarget.parentNode.parentNode) // con parentNode puoi attraversare il DOM tree verso l'alto
+                    console.log(event.currentTarget) // currentTarget vi assicura di selezionare sempre il proprietario dell'evento (in questo caso la cella "day" e mai il suo span interno)
+                    console.log(event.target.closest(".container"))
+                    // con closest potete ridurre potenziali problematiche derivanti dal selezionare elementi diversi, 
+                    // e quindi avere distanze diverse da percorrere per raggiungere un nodo genitore
+                    // closest, indipendentemente da quanta distanza ci sia da percorrere selezionerà il primo genitore con un determinato selettore CSS
+                }
+
+
+
+                // fine della creazione del contenuto della cella, col suo span, il testo interno
+                const innerSpan = document.createElement("span")
+                innerSpan.innerText = i + 1
+                // questo è il momento dell'inserimento della singola cella nel dom 
+                // (verrà ripetuto un certo numero di volte, grazie al for loop, per più celle)
+                day.appendChild(innerSpan)
+                container.appendChild(day)
+            }
+        })
+
+        // questa funzione è associata all'onclick del bottone fratello dell'input
+        const handleInput = (e) => {
+            const container = document.querySelector(".container")
+            const input = document.getElementById("myInput")
+            const inputValue = input.value
+            if (inputValue !== "") {
+                container.innerHTML = inputValue
+            } else {
+                alert("inserisci del testo nell'input")
+            }
+        }
+
+        // questa funzione è assegnata al form
+        const handleSubmit = (e) => {
+            e.preventDefault()
+            console.log("SUBMIT")
+            alert("SUBMIT")
+        }
+
+        window.onload = function () { } // avviene successivamente al DOMContentLoaded
+
+
+    </script>
+</body>
+
+</html>
