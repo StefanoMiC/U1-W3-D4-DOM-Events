@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music App</title>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .card {
+            display: inline-block;
+            overflow: hidden;
+            border: 1px solid black;
+            box-shadow: 0 3px 10px rgb(0 0 0 / 10%);
+            border-radius: 6px;
+            max-width: 250px;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+
+        .card-body {
+            padding: 1rem;
+        }
+
+        h3,
+        h4 {
+            margin-top: 0;
+        }
+
+        h4 {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            font-weight: 500;
+        }
+
+        input {
+            margin-bottom: 2rem;
+            min-width: 600px;
+            min-height: 40px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <input type="text" onchange="handleSearch(event)">
+    <div class="container">
+        <!-- <div class="card">
+            <img src="https://e-cdns-images.dzcdn.net/images/cover/23bdeda0503dec55e7ba6a9f56d0c3c2/250x250-000000-80-0-0.jpg"
+                alt="">
+
+            <div class="card-body">
+                <h3>Space Oddity</h3>
+                <h4>Album name</h4>
+                <p>David Bowie</p>
+            </div>
+        </div> -->
+    </div>
+
+    <script src="songs.js"></script>
+
+    <script>
+
+
+
+        window.onload = function () {
+            const container = document.querySelector(".container")
+            console.log(songs)
+
+            songs.forEach(song => {
+                container.innerHTML += `<div class="card" onclick='window.location.assign("${song.artist.link}")'>
+                                            <img src=${song.album.cover_medium}
+                                                alt="">
+
+                                            <div class="card-body">
+                                                <h3>${song.title_short}</h3>
+                                                <h4>${song.album.title}</h4>
+                                                <p>by: ${song.artist.name}</p>
+                                            </div>
+                                        </div>`
+            })
+
+            // container.innerHTML = songs.map(song => `<div class="card" onclick='window.location.assign("${song.artist.link}")'>
+            //                                 <img src=${song.album.cover_medium}
+            //                                     alt="">
+
+            //                                 <div class="card-body">
+            //                                     <h3>${song.title_short}</h3>
+            //                                     <h4>${song.album.title}</h4>
+            //                                     <p>${song.artist.name}</p>
+            //                                 </div>
+            //                             </div>`).join("")
+
+
+
+        }
+
+        const handleSearch = event => {
+            const container = document.querySelector(".container")
+
+
+            const searchQuery = event.target.value.toLowerCase()
+            console.log(searchQuery)
+
+            const filteredSongs = songs.filter(song => song.title_short.toLowerCase().includes(searchQuery))
+
+            container.innerHTML = ""
+            filteredSongs.forEach(song => {
+                container.innerHTML += `<div class="card" onclick='window.location.assign("${song.artist.link}")'>
+                                                    <img src=${song.album.cover_medium}
+                                                        alt="">
+                    
+                                                    <div class="card-body">
+                                                            <h3>${song.title_short}</h3>
+                                                            <h4>${song.album.title}</h4>
+                                                            <p>by: ${song.artist.name}</p>
+                                                        </div>
+                                                    </div>`
+            })
+
+
+            // // questo metodo filtra, mappa e joina in un'unica riga per assegnare la risultante stringa come innerHTML di container
+            // container.innerHTML = songs.filter(song => song.title_short.toLowerCase().includes(searchQuery)).map(song =>
+            //     `<div class="card" onclick='window.location.assign("${song.artist.link}")'>
+            //                                  <img src=${song.album.cover_medium}
+            //                                      alt="">
+
+            //                                  <div class="card-body">
+            //                                      <h3>${song.title_short}</h3>
+            //                                      <h4>${song.album.title}</h4>
+            //                                      <p>by: ${song.artist.name}</p>
+            //                                  </div>
+            //                              </div>`).join("")
+
+        }
+    </script>
+</body>
+
+</html>
